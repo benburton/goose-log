@@ -52,10 +52,10 @@ goose-log processes JSON requests of the following format:
 </code></pre>
 It expects a top-level key of "details" which can contain an arbitrary JSON object rendered in the server logs as:
 <pre><code>> ERROR [2012-04-07 20:38:01,666] com.goose.logging.ErrorLoggingServlet: 
-User Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.27) Gecko/20120216 Firefox/3.6.27
-Origin: http://fiddle.jshell.net
-Timestamp: Sat Apr 07 16:38:01 EDT 2012
-Details:
+  User Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.27) Gecko/20120216 Firefox/3.6.27
+  Origin: http://fiddle.jshell.net
+  Timestamp: Sat Apr 07 16:38:01 EDT 2012
+  Details:
     event: inbox.message.read
     message: inbox message not found exception
 </code></pre>

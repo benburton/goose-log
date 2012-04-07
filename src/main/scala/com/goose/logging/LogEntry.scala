@@ -35,7 +35,7 @@ case class LogEntry(userAgent: Option[String] = Some(""),
 
 object LogEntry {
   
-  private val tabSize = 4
+  private val tabSize = 2
   private val indent = " " * tabSize
   
   private def appendWithIndent(stringBuilder: StringBuilder, key: String, value: String): StringBuilder = {
