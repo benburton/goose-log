@@ -26,10 +26,10 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
    */
   private implicit def requestBodyToLogEntries(requestBody: String): List[LogEntry] = {
     try {
-      parse(request.body).extract[List[LogEntry]]
+      parse(requestBody).extract[List[LogEntry]]
     }
     catch {
-      case e: Exception => List(parse(request.body).extract[LogEntry])
+      case e: Exception => List(parse(requestBody).extract[LogEntry])
     }
   }
 
