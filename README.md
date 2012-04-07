@@ -31,3 +31,21 @@ goose-log is a client-side logging framework written in [Scala](http://scala-lan
 [info] Created /Users/bburton/Documents/workspace-scala/goose-log/.idea_modules/default-eb8248.iml
 [info] Created /Users/bburton/Documents/workspace-scala/goose-log/.idea_modules/project.iml
 </code></pre>
+
+3. Launch IntelliJ IDEA and select File > Open Project, choosing the goose-log folder as the project root.
+
+## Logging
+
+You can use the client-side logger provided here: TODO -- add JS code for frontend
+
+### JSON Logging Request
+
+goose-log processes JSON requests of the following format:
+<pre><code>{
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.142 Safari/535.19",
+  "details" : {
+    "event": "inbox.message.read"
+    "message": "inbox message not found exception"
+  }
+}
+</code></pre>

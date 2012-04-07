@@ -5,9 +5,15 @@ import net.liftweb.json.JsonParser.parse
 import net.liftweb.json.DefaultFormats
 import javax.servlet.http.HttpServletResponse._
 import com.codahale.logula.Logging
-import org.apache.log4j.Level
 
-class ErrorLoggerServlet extends ScalatraServlet with CrossOriginReourceSharing with Logging {
+/**
+ * Simple ScalatraServlet to process and log entries coming from POST requests. Allows entries from any Origin via CORS.
+ */
+class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing with Logging {
+
+  val LOG_ENTRY_FORMAT = """
+  User Agent: %s
+  Details: %s"""
 
   Logging.configure { log =>
     log.file.enabled = true
@@ -18,13 +24,19 @@ class ErrorLoggerServlet extends ScalatraServlet with CrossOriginReourceSharing 
 
   implicit val formats = DefaultFormats
 
+  implicit def lgoEntryAsString(logEntry: LogEntry): String = {
+    String.format(LOG_ENTRY_FORMAT, logEntry.userAgent,
+    logEntry.details.foldLeft("\n    ")((acc, kv) => acc + kv._1 + ": " + kv._2 + "\n    "))
+  }
+
   post("/") {
     try {
       val logEntry = parse(request.body).extract[LogEntry]
-      log.error(logEntry.details)
+      log.error(logEntry)
     }
     catch {
-      case e: Exception => response.setStatus(SC_OK)
+      case e: Exception => println(e)
+        response.setStatus(SC_OK)
     }
   }
 
@@ -34,5 +46,9 @@ class ErrorLoggerServlet extends ScalatraServlet with CrossOriginReourceSharing 
 
 }
 
-case class LogEntry(context: String, details: String)
+/**
+ * Case class defining the structure of the JSON request to be logged.
+ */
+case class LogEntry(userAgent: String,
+                    details: Map[String, String])
 
