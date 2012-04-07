@@ -9,7 +9,7 @@ goose-log is a client-side logging framework written in [Scala](http://scala-lan
 3. Use the container:start target to start the service:
 
 <pre><code>bburton$ sbt
-   > container:start
-   [info] Started SelectChannelConnector@0.0.0.0:8080 STARTING
-   [success] Total time: 10 s, completed Apr 7, 2012 9:20:31 AM
+> container:start
+[info] Started SelectChannelConnector@0.0.0.0:8080 STARTING
+[success] Total time: 10 s, completed Apr 7, 2012 9:20:31 AM
 </code></pre>
