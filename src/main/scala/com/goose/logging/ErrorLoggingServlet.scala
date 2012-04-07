@@ -38,8 +38,10 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
       val logEntries: List[LogEntry] = request.body
       for (logEntry <- logEntries) {
         log.error(logEntry.copy(userAgent = Some(request.getHeader("User-Agent")))
-          .copy(timestamp = Some(new Date())).toString)
+          .copy(timestamp = Some(new Date()))
+          .copy(origin = Some(request.getHeader("Origin"))).toString)
       }
+      response.setStatus(SC_OK)
     }
     catch {
       case e: Exception => e.printStackTrace()

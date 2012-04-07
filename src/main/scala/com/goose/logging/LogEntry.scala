@@ -6,6 +6,7 @@ import java.util.Date
  * Simple case class representing an entry for the logger.
  */
 case class LogEntry(userAgent: Option[String] = Some(""),
+               origin: Option[String] = None, 
                timestamp: Option[Object] = Some(new Date()),
                details: Option[Map[String, String]] = None) {
   
@@ -13,6 +14,10 @@ case class LogEntry(userAgent: Option[String] = Some(""),
     var buffer = new StringBuilder("\n")
     userAgent match {
       case ua: Some[String] => buffer = LogEntry.appendWithIndent(buffer, "User Agent", ua.get)
+      case None =>
+    }
+    origin match {
+      case o: Some[String] => buffer = LogEntry.appendWithIndent(buffer, "Origin", o.get)
       case None =>
     }
     timestamp match {
@@ -23,6 +28,7 @@ case class LogEntry(userAgent: Option[String] = Some(""),
       case dt: Some[Map[String, String]] => buffer = LogEntry.appendWithIndent(buffer, "Details", dt.get)
       case None =>
     }
+    
     buffer.toString()
   }
 }
