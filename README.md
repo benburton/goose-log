@@ -38,21 +38,47 @@ goose-log is a client-side logging framework written in [Scala](http://scala-lan
 
 You can use the client-side logger provided here: TODO -- add JS code for frontend
 
-### JSON Logging Request
+### JSON Logging Request Formats
+
+#### Basic
 
 goose-log processes JSON requests of the following format:
 <pre><code>{
   "details" : {
-    "event" : "inbox.message.read"
+    "event" : "inbox.message.read",
     "message" : "inbox message not found exception"
   }
 }
 </code></pre>
-It expects a top-level JSON key of "details" which can contain an arbitrary JSON object rendered in the server logs as:
+It expects a top-level key of "details" which can contain an arbitrary JSON object rendered in the server logs as:
 <pre><code>ERROR [2012-04-07 16:26:20,196] com.goose.logging.ErrorLoggingServlet: 
     User Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.27) Gecko/20120216 Firefox/3.6.27
     Time: Sat Apr 07 12:26:20 EDT 2012
     Details:
         event: inbox.message.read
         message: inbox message not found exception
+</code></pre>
+
+#### Optional Parameters
+
+The JSON requets can also take the following optional parameters:
+
+TODO
+
+#### Sending a JSON List
+
+Instead of passing error logging requests one-at-a-time, the logger can accept a JSON list of objects:
+
+<pre><code>[
+{
+  "details" : {
+    "event" : "inbox.message.read",
+    "message" : "inbox message not found exception"
+  }
+},{
+  "details" : {
+    "event" : "user.authentication",
+    "message" : "bad user authentication information"
+  }
+}]
 </code></pre>

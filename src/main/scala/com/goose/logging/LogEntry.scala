@@ -5,16 +5,23 @@ import java.util.Date
 /**
  * Simple case class representing an entry for the logger.
  */
-case class LogEntry(userAgent: Option[String] = None,
-               timestamp: Option[Object] = None,
+case class LogEntry(userAgent: Option[String] = Some(""),
+               timestamp: Option[Object] = Some(new Date()),
                details: Option[Map[String, String]] = None) {
   
   override def toString() = {
     var buffer = new StringBuilder("\n")
-    userAgent match { case ua: Some[String] => buffer = LogEntry.appendWithIndent(buffer, "User Agent", ua.get) }
-    timestamp match { case ts: Some[Date] => buffer = LogEntry.appendWithIndent(buffer, "Timestamp", ts.get.toString) }
+    userAgent match {
+      case ua: Some[String] => buffer = LogEntry.appendWithIndent(buffer, "User Agent", ua.get)
+      case None =>
+    }
+    timestamp match {
+      case ts: Some[Date] => buffer = LogEntry.appendWithIndent(buffer, "Timestamp", ts.get.toString)
+      case None =>
+    }
     details match {
       case dt: Some[Map[String, String]] => buffer = LogEntry.appendWithIndent(buffer, "Details", dt.get)
+      case None =>
     }
     buffer.toString()
   }

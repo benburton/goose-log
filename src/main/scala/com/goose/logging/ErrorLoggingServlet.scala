@@ -21,12 +21,25 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
 
   implicit val formats = DefaultFormats
 
+  /**
+   * Implicit coersion from a String to a List of LogEntry objects
+   */
+  private implicit def requestBodyToLogEntries(requestBody: String): List[LogEntry] = {
+    try {
+      parse(request.body).extract[List[LogEntry]]
+    }
+    catch {
+      case e: Exception => List(parse(request.body).extract[LogEntry])
+    }
+  }
+
   post("/") {
     try {
-      val logEntry: LogEntry = parse(request.body).extract[LogEntry]
-        .copy(userAgent = Some(request.getHeader("User-Agent")))
-        .copy(timestamp = Some(new Date()))
-      log.error(logEntry.toString)
+      val logEntries: List[LogEntry] = request.body
+      for (logEntry <- logEntries) {
+        log.error(logEntry.copy(userAgent = Some(request.getHeader("User-Agent")))
+          .copy(timestamp = Some(new Date())).toString)
+      }
     }
     catch {
       case e: Exception => e.printStackTrace()
