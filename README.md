@@ -60,11 +60,31 @@ It expects a top-level key of "details" which can contain an arbitrary JSON obje
     message: inbox message not found exception
 </code></pre>
 
-#### Optional Parameters
+Any of the additional metadata parameters (User Agent, Origin, Timestamp) can be explicitly overridden in the JSON request (TODO this isn't actually true at the moment):
 
-The JSON requets can also take the following optional parameters:
+<pre><code>{
+  "userAgent" : "Lynx/2.8.5dev.16 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6b",
+  "origin" : "http://www.google.com/",
+  "timestamp" : 978310861000,
+  "details" : {
+    "event" : "inbox.message.read",
+    "message" : "inbox message not found exception"
+  }
+}
+</code></pre>
 
-TODO
+generates the corresponding log entry:
+
+<pre><code>> ERROR [2012-04-07 20:38:01,666] com.goose.logging.ErrorLoggingServlet:
+  User Agent: Lynx/2.8.5dev.16 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.6b
+  Origin: http://www.google.com/
+  Timestamp: Sun Dec 31 20:01:01 EST 2000
+  Details:
+    event: inbox.message.read
+    message: inbox message not found exception
+</code></pre>
+
+Note that the timestamp JSON will accept a Long value representing milliseconds since the Unix ecoc, or a string representing a timestamp to be written to the log explicitly.
 
 #### Sending a JSON List
 
