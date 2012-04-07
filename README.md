@@ -60,6 +60,8 @@ It expects a top-level key of "details" which can contain an arbitrary JSON obje
     message: inbox message not found exception
 </code></pre>
 
+#### Optional Parameters
+
 Any of the additional metadata parameters (User Agent, Origin, Timestamp) can be explicitly overridden in the JSON request (TODO this isn't actually true at the moment):
 
 <pre><code>{
