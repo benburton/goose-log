@@ -42,7 +42,6 @@ You can use the client-side logger provided here: TODO -- add JS code for fronte
 
 goose-log processes JSON requests of the following format:
 <pre><code>{
-  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.142 Safari/535.19",
   "details" : {
     "event": "inbox.message.read"
     "message": "inbox message not found exception"
