@@ -86,7 +86,24 @@ generates the corresponding log entry:
     message: inbox message not found exception
 </code></pre>
 
-Note that the timestamp JSON will accept a Long value representing milliseconds since the Unix ecoc, or a string representing a timestamp to be written to the log explicitly.
+Note that the timestamp JSON will accept a Long value representing milliseconds since the Unix epoc, or a string representing a timestamp to be written to the log explicitly.
+
+##### The Provider Parameter
+
+You can add a provider. It writes to a files with that name. (TODO: rewrite this copy)
+
+For example, the JSON request
+
+<pre><code>{
+  "provider" : "my-awesome-webapp",
+  "details" : {
+    "event" : "inbox.message.read",
+    "message" : "inbox message not found exception"
+  }
+}
+</code></pre>
+
+will append to the file my-awesome-webapp.log in the default directory (currently /var/log/).
 
 #### Sending a JSON List
 

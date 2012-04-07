@@ -5,10 +5,11 @@ import java.util.Date
 /**
  * Simple case class representing an entry for the logger.
  */
-case class LogEntry(userAgent: Option[String] = Some(""),
-               origin: Option[String] = None, 
-               timestamp: Option[Object] = Some(new Date()),
-               details: Option[Map[String, String]] = None) {
+case class LogEntry(provider: Option[String] = None,
+                    userAgent: Option[String] = Some(""),
+                    origin: Option[String] = None,
+                    timestamp: Option[Object] = Some(new Date()),
+                    details: Option[Map[String, String]] = None) {
   
   override def toString() = {
     var buffer = new StringBuilder("\n")

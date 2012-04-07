@@ -22,7 +22,7 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
   implicit val formats = DefaultFormats
 
   /**
-   * Implicit coersion from a String to a List of LogEntry objects
+   * Implicit coersion from a String to a List[LogEntry]
    */
   private implicit def requestBodyToLogEntries(requestBody: String): List[LogEntry] = {
     try {
@@ -36,10 +36,18 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
   post("/") {
     try {
       val logEntries: List[LogEntry] = request.body
-      for (logEntry <- logEntries) {
-        log.error(logEntry.copy(userAgent = Some(request.getHeader("User-Agent")))
-          .copy(timestamp = Some(new Date()))
-          .copy(origin = Some(request.getHeader("Origin"))).toString)
+      log.synchronized {
+        for (logEntry <- logEntries) {
+          Logging.configure { log =>
+            log.file.enabled = true
+            log.file.filename = "/var/log/" + logEntry.provider.getOrElse("default") + ".log"
+            log.file.maxSize = 10 * 1024 // KB
+            log.file.retainedFiles = 5 // keep five old logs around
+          }
+          log.error(logEntry.copy(userAgent = Some(request.getHeader("User-Agent")))
+            .copy(timestamp = Some(new Date()))
+            .copy(origin = Some(request.getHeader("Origin"))).toString)
+        }
       }
       response.setStatus(SC_OK)
     }
