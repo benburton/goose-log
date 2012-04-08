@@ -1,29 +1,63 @@
-/**
- * This is terrible Gustavo! Fix it!
- */
 (function() {
-  var s = document.createElement('script');
-  s.type = 'text/javascript';
-  s.async = true;
-  s.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js';
-  var x = document.getElementsByTagName('script')[0];
-  x.parentNode.insertBefore(s, x);
-})();
+    var simpleAjax = {};
 
-/**
- * Oh man! This is worse!
- */
-var gooseLog = function(data) {
-  $.ajax({
-    type: "POST",
-    contentType: "application/json",
-    url: "http://localhost:8080/",
-    data: JSON.stringify(data),
-    success: function(data) {
-      alert("success!");
-    },
-    error: function(data) {
-      alert("Gustavo noooo!");
+    function createXMLHttpRequest()
+    {
+        if (window.XMLHttpRequest) {
+            return new window.XMLHttpRequest;
+        }
+        //IE7 and below
+        else {
+            try {
+                return new ActiveXObject("MSXML2.XMLHTTP.3.0");
+            }
+            catch(ex) {
+                return null;
+            }
+        }
     }
-  });
-};
+
+    function asyncRequest(config) {
+        var xmlHttpRequest = createXMLHttpRequest();
+        xmlHttpRequest.open(config.method, config.url, true);
+        if (config.data) {
+            xmlHttpRequest.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+            xmlHttpRequest.setRequestHeader("Connection", "close");
+        }
+        xmlHttpRequest.onreadystatechange = function (oEvent) {
+            if (xmlHttpRequest.readyState === 4) {
+                if (xmlHttpRequest.status === 200) {
+                    if (typeof config.success === 'function') {
+                        config.success(xmlHttpRequest);
+                    }
+                }
+                else {
+                    if (typeof config.error === 'function') {
+                        config.error(xmlHttpRequest);
+                    }
+                }
+            }
+        };
+
+        //need to serialize the data for this to work...
+        xmlHttpRequest.send(config.data);
+    }
+
+    simpleAjax = {
+        get : function(config) {
+            config.method = 'GET';
+            asyncRequest(config);
+        },
+        post : function(config) {
+            config.method = 'POST';
+            asyncRequest(config);
+        }
+    };
+
+    window.error = function(message, url, line) {
+/*        simpleAjax.post({
+
+        });*/
+    }
+
+})();
