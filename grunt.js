@@ -4,7 +4,14 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     lint: {
-      files: ['grunt.js', 'src/main/javascript/*.js', 'test/main/javascript/*.js']
+      files: ['grunt.js', 'src/main/javascript/src/*.js', 'test/main/javascript/*.js']
+    },
+    min: {
+      dist: {
+        src: ['src/main/javascript/libs/json2.js', 'src/main/javascript/src/logger.js'],
+        dest: 'dist/built.min.js',
+        separator: ';'
+      }
     },
     qunit: {
       files: ['test/**/*.html']
