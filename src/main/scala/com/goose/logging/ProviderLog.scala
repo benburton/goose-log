@@ -10,7 +10,7 @@ case class ProviderLog(provider: String) extends Logging {
   
   Logging.configure { log =>
     log.file.enabled = true
-    log.file.filename = "%s%s.log".format(LOG_PATH, provider)
+    log.file.filename = "%s/%s.log".format(LOG_PATH, provider)
     log.file.maxSize = 10 * 1024 // KB
     log.file.retainedFiles = 5 // keep five old logs around
   }
