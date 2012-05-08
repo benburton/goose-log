@@ -6,19 +6,15 @@ import net.liftweb.json.DefaultFormats
 import javax.servlet.http.HttpServletResponse._
 import com.codahale.logula.Logging
 import java.util.Date
+import collection.mutable.{Map, HashMap}
 
 /**
  * Simple ScalatraServlet to process and log entries coming from POST requests. Allows entries from any Origin via CORS.
  */
-class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing with Logging {
+class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing {
 
-  Logging.configure { log =>
-    log.file.enabled = true
-    log.file.filename = "/var/log/test.log"
-    log.file.maxSize = 10 * 1024 // KB
-    log.file.retainedFiles = 5 // keep five old logs around
-  }
-
+  var providerLogs: Map[String, ProviderLog] = new HashMap[String, ProviderLog]
+  
   implicit val formats = DefaultFormats
 
   /**
@@ -36,17 +32,11 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
   post("/") {
     try {
       val logEntries: List[LogEntry] = request.body
-      log.synchronized {
-        for (logEntry <- logEntries) {
-          Logging.configure { log =>
-            log.file.enabled = true
-            log.file.filename = "/var/log/" + logEntry.provider.getOrElse("default") + ".log"
-            log.file.maxSize = 10 * 1024 // KB
-            log.file.retainedFiles = 5 // keep five old logs around
-          }
-          log.error(logEntry.copy(userAgent = Some(request.getHeader("User-Agent")))
-            .copy(timestamp = Some(new Date()))
-            .copy(origin = Some(request.getHeader("Origin"))).toString)
+      for (logEntry <- logEntries) {
+        val provider: String = logEntry.provider.getOrElse("default")
+        getProviderLog(provider) match {
+          case log: Some[ProviderLog] => log.get.error(logEntry, request)
+          case None => throw new Exception("unable to find or create log for %s".format(provider))
         }
       }
       response.setStatus(SC_OK)
@@ -59,6 +49,13 @@ class ErrorLoggingServlet extends ScalatraServlet with CrossOriginReourceSharing
 
   notFound {
     response.setStatus(SC_NOT_FOUND)
+  }
+  
+  private def getProviderLog(provider: String): Option[ProviderLog] = {
+    if (!providerLogs.contains(provider)) {
+      providerLogs.put(provider, new ProviderLog(provider))
+    }
+    providerLogs.get(provider)
   }
 
 }
