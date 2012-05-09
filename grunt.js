@@ -8,8 +8,8 @@ module.exports = function(grunt) {
     },
     min: {
       dist: {
-        src: ['src/main/javascript/libs/json2.js', 'src/main/javascript/libs/microajax.minified.js', 'src/main/javascript/src/logger.js'],
-        dest: 'dist/built.min.js',
+        src: ['src/main/javascript/libs/json2.js', 'src/main/javascript/src/logger.js'],
+        dest: 'dist/goose-log.js',
         separator: ';'
       }
     },
